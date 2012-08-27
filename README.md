@@ -31,6 +31,29 @@ To remove the node:
 lein pallet converge cinderella.groups.cinderella/cinderella 0
 ```
 
+## Testing
+
+To run the live tests add the following in your `~/.lein/profiles.clj` file:
+
+```clj
+{:live-test {:jvm-opts ["-Dpallet.test.live=true
+                        "-Dpallet.test.service-name=bluelock"]
+             :dependencies [[org.jclouds/jclouds-compute
+                             "1.5.0-beta.11"]
+                            [org.jclouds/jclouds-blobstore
+                             "1.5.0-beta.11"]
+                            [org.jclouds/jclouds-all
+                             "1.5.0-beta.11"]
+                            [org.cloudhoist/pallet-jclouds
+                             "1.5.0-SNAPSHOT"]]}}
+```
+
+adjusting the `service-name` to correspond to the pallet service you have
+confiured, and the dependencies to pull in the correct jclouds providers.
+
+Then you can run
+
+    lein pallet with-profiles live-test,default test
 
 ## License
 
