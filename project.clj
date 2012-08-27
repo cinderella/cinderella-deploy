@@ -16,6 +16,7 @@
                  [org.jclouds.provider/aws-ec2 "1.5.0-beta.11"]
                  [org.jclouds.provider/aws-s3 "1.5.0-beta.11"]
                  [org.jclouds.driver/jclouds-slf4j "1.5.0-beta.11"]
+                 [org.jclouds.driver/jclouds-sshj "1.5.0-beta.11"]
                  [org.slf4j/slf4j-api "1.6.1"]
                  [ch.qos.logback/logback-core "1.0.0"]
                  [ch.qos.logback/logback-classic "1.0.0"]]

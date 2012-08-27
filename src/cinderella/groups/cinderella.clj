@@ -1,5 +1,5 @@
-(ns cinderella-demo.groups.cinderella-demo
-  "Node defintions for cinderella-demo
+(ns cinderella.groups.cinderella
+  "Node definitions for cinderella
 
 Creates a node-spec that will install and configure cinderella and vblob
 on a single node."
@@ -32,7 +32,7 @@ on a single node."
    :hardware {:min-cores 1}))
 
 (def
-  ^{:doc "Defines the type of node cf-demo will run on"}
+  ^{:doc "Defines the type of node cinderella will run on"}
   base-server
   (server-spec
    :phases
@@ -46,7 +46,7 @@ information for the cinderella backend."
    session (settings-from-compute-service (:compute session))))
 
 (def
-  ^{:doc "Define a server spec for cf-demo"}
+  ^{:doc "Define a server spec for cinderella (EC2)"}
   cinderella-server
   (server-spec
    :extends [(java {})(jetty {})]
@@ -59,7 +59,7 @@ information for the cinderella backend."
                           ;; :if-config-changed true
                           :action :restart))}))
 (def
-  ^{:doc "Define a server spec for cf-demo"}
+  ^{:doc "Define a server spec for vblob (S3)"}
   vblob-server
   (server-spec
    :extends [(nodejs
@@ -72,15 +72,15 @@ information for the cinderella backend."
 
 
 (def
-  ^{:doc "Define a server spec for cf-demo"}
-  cf-demo-server
+  ^{:doc "Define a server spec that exposes S3 and EC2 apis"}
+  aws-adapter
   (server-spec
    :extends [vblob-server cinderella-server]))
 
 (def
   ^{:doc "Defines a group spec that can be passed to converge or lift."}
-  cinderella-demo
+  cinderella
   (group-spec
    "cinderella"
-   :extends [base-server cf-demo-server]
+   :extends [base-server aws-adapter]
    :node-spec default-node-spec))

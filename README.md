@@ -1,21 +1,22 @@
-# Cinderella demo
+# Cinderella deployment
 
-Cinderella deploy demo. Deploys a single node running cinderella and vblob.
+Cinderella deployment. Deploys a single node running cinderella and vblob.
 
 # Running
 
-Install [leiningen](https://github.com/technomancy/leiningen).
+Install [leiningen 2](https://github.com/technomancy/leiningen).
 
 In the project root, configure pallet with your username and password:
 
 ```
-lein pallet add-service bluelock "username" "password"
+lein pallet add-service bluelock-zone01 vcloud USER@ORG PASSWORD vcloud.endpoint https://zone01.bluelock.com/api vcloud.template osFamily=UBUNTU jclouds.vcloud.defaults.network 'internet01-.*'
+
 ```
 
 To create the cinderalla node:
 
 ```
-lein pallet converge cinderella-demo.groups.cinderella-demo/cinderella-demo 1
+lein pallet converge cinderella.groups.cinderella/cinderella 1
 ```
 
 To list the node:
@@ -27,7 +28,7 @@ lein pallet nodes
 To remove the node:
 
 ```
-lein pallet converge cinderella-demo.groups.cinderella-demo/cinderella-demo 0
+lein pallet converge cinderella.groups.cinderella/cinderella 0
 ```
 
 

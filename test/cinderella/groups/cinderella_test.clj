@@ -1,6 +1,6 @@
-(ns cinderella-demo.groups.cinderella-demo-test
+(ns cinderella.groups.cinderella-test
   (:use
-   [cinderella-demo.groups.cinderella-demo :only [cinderella-demo]]
+   [cinderella.groups.cinderella :only [cinderella]]
    [org.jclouds.blobstore2 :only [blobstore containers]]
    [org.jclouds.compute2 :only [compute-service]]
    [pallet.action :only [def-clj-action]]
@@ -40,10 +40,10 @@
         endpoint (format "http://%s:%s/" (primary-ip node) ec2-port)
         _ (logging/debugf "Testing with %s %s %s" identity credential endpoint)
         c (compute-service
-           "aws-ec2" identity credential :jclouds.endpoint endpoint)
+           "ec2" identity credential :jclouds.endpoint endpoint)
         images (.. c getContext
                    (unwrap org.jclouds.ec2.EC2ApiMetadata/CONTEXT_TOKEN)
-                   getApi getAMIServices (describeImagesInRegion nil nil))]
+                   getApi getAMIServices (describeImagesInRegion nil []))]
     (is c "Compute returned")
     (is (seq images) "Compute useable")
     (logging/infof "Compute images %s" (vec images))
@@ -54,14 +54,14 @@
    [image [{:os-family :ubuntu :os-64-bit true}]]
    (live-test/test-nodes
     [compute node-map node-types]
-    {:cinderella-demo
+    {:cinderella
      (->
-      cinderella-demo
+      cinderella
       (assoc :image image :count 1)
       (update-in [:phases] assoc
                  :bootstrap (phase-fn
                               (automated-admin-user))
                  :verify (phase-fn
-                           (verify-vblob :cinderella-demo)
-                           (verify-cinderella :cinderella-demo))))}
-    (lift (:cinderella-demo node-types) :phase :verify :compute compute))))
+                           (verify-vblob :cinderella)
+                           (verify-cinderella :cinderella))))}
+    (lift (:cinderella node-types) :phase :verify :compute compute))))
