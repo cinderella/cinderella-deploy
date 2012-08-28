@@ -53,7 +53,11 @@ information for the cinderella backend."
   ^{:doc "Define a server spec for cinderella (EC2)"}
   cinderella-server
   (server-spec
-   :extends [(java {})(jetty {})]
+   :extends [(java {:service-defaults
+                    {"JAVA_OPTIONS"
+                     (str "-Xms256m -Xmx512m -XX:PermSize=64m "
+                          "-XX:MaxPermSize=128m -verbose:gc")}})
+             (jetty {})]
    :phases {:settings (phase-fn
                         (cinderella-using-compute))
             :configure (phase-fn
