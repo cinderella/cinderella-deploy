@@ -59,9 +59,10 @@ information for the cinderella backend."
             :configure (phase-fn
                          (install-cinderella)
                          (configure-cinderella)
-                         (init-service
-                          ;; :if-config-changed true
-                          :action :restart))}))
+                         (init-service :action :restart))
+            :deploy (phase-fn
+                      (install-cinderella)
+                      (init-service :action :restart))}))
 (def
   ^{:doc "Define a server spec for vblob (S3)"}
   vblob-server
