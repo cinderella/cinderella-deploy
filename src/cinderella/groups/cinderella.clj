@@ -14,6 +14,7 @@ on a single node."
    [pallet.crate.java :only [java]]
    [pallet.crate.jetty :only [deploy init-service jetty]]
    [pallet.crate.vblob :only [vblob vblob-forever]]
+   [pallet.parameter :only [get-target-settings]]
    [pallet.phase :only [phase-fn]]))
 
 (defn settings-from-compute-service
