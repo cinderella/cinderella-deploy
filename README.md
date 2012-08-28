@@ -9,7 +9,7 @@ Install [leiningen 2](https://github.com/technomancy/leiningen).
 In the project root, configure pallet with your username and password:
 
 ```
-lein pallet add-service bluelock-zone01 vcloud USER@ORG PASSWORD vcloud.endpoint https://zone01.bluelock.com/api vcloud.template osFamily=UBUNTU jclouds.vcloud.defaults.network 'internet01-.*'
+lein pallet add-service bluelock vcloud-ORG USER@ORG PASSWORD vcloud.endpoint https://zone01.bluelock.com/api vcloud.template osFamily=UBUNTU jclouds.vcloud.defaults.network 'internet01-.*'
 
 ```
 

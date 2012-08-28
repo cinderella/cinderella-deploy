@@ -49,6 +49,9 @@
     </encoder>
   </appender>
 
+  <!-- too chatty -->
+  <logger name="net.schmizz" level="OFF"/>
+
   <logger name="jclouds.headers" level="INFO">
     <appender-ref ref="WIREFILE" />
   </logger>
