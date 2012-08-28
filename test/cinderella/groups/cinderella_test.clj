@@ -41,12 +41,13 @@
         _ (logging/debugf "Testing with %s %s %s" identity credential endpoint)
         c (compute-service
            "ec2" identity credential :jclouds.endpoint endpoint)
-        images (.. c getContext
+        regions (.. c getContext
                    (unwrap org.jclouds.ec2.EC2ApiMetadata/CONTEXT_TOKEN)
-                   getApi getAMIServices (describeImagesInRegion nil []))]
+                   getApi getAvailabilityZoneAndRegionServices
+                   (describeRegions nil))]
     (is c "Compute returned")
-    (is (seq images) "Compute useable")
-    (logging/infof "Compute images %s" (vec images))
+    (is (seq regions) "Compute useable")
+    (logging/infof "Compute regions %s" (vec regions))
     session))
 
 (deftest live-test
