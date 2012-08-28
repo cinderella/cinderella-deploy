@@ -42,8 +42,11 @@ on a single node."
   "Use the compute service from the session to extract the authorisation
 information for the cinderella backend."
   [session]
-  (cinderella-settings
-   session (settings-from-compute-service (:compute session))))
+  (let [{:keys [user install-path]}
+        (get-target-settings session :jetty nil)]
+    (cinderella-settings
+     session (assoc (settings-from-compute-service (:compute session))
+               :home install-path))))
 
 (def
   ^{:doc "Define a server spec for cinderella (EC2)"}
