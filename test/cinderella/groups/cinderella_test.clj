@@ -6,6 +6,7 @@
    [pallet.action :only [def-clj-action]]
    [pallet.core :only [lift]]
    [pallet.crate.automated-admin-user :only [automated-admin-user]]
+   [pallet.crate.network-service :only [wait-for-port-listen]]
    [pallet.node :only [primary-ip]]
    [pallet.parameter :only [get-target-settings]]
    [pallet.phase :only [phase-fn]]
@@ -31,6 +32,12 @@
     (is (containers bs) "Blobstore containers listable")
     (logging/infof "Blobstore containers %s" (vec (containers bs)))
     session))
+
+(defn wait-for-cinderella
+  [session & {:keys [instance-id]}]
+  (let [{:keys [ec2-port]}
+        (get-target-settings session :cinderella instance-id)]
+    (wait-for-port-listen session ec2-port :service-name "cinderella")))
 
 (def-clj-action verify-cinderella
   [session group-name & {:keys [instance-id]}]
@@ -64,5 +71,6 @@
                               (automated-admin-user))
                  :verify (phase-fn
                            (verify-vblob :cinderella)
+                           (wait-for-cinderella)
                            (verify-cinderella :cinderella))))}
     (lift (:cinderella node-types) :phase :verify :compute compute))))
