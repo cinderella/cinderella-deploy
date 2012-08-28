@@ -13,6 +13,7 @@ on a single node."
    [pallet.crate.forever :only [forever]]
    [pallet.crate.java :only [java]]
    [pallet.crate.jetty :only [deploy init-service jetty]]
+   [pallet.crate.limits-conf :only [ulimit limits-conf]]
    [pallet.crate.vblob :only [vblob vblob-forever]]
    [pallet.parameter :only [get-target-settings]]
    [pallet.phase :only [phase-fn]]))
@@ -45,9 +46,12 @@ information for the cinderella backend."
   [session]
   (let [{:keys [user install-path]}
         (get-target-settings session :jetty nil)]
-    (cinderella-settings
-     session (assoc (settings-from-compute-service (:compute session))
-               :home install-path))))
+    (->
+     session
+     (cinderella-settings
+      (assoc (settings-from-compute-service (:compute session))
+        :home install-path))
+     (ulimit {:domain user :type "soft" :item "nofile" :value 4096}))))
 
 (def
   ^{:doc "Define a server spec for cinderella (EC2)"}
@@ -63,6 +67,7 @@ information for the cinderella backend."
             :configure (phase-fn
                          (install-cinderella)
                          (configure-cinderella)
+                         (limits-conf)
                          (init-service :action :restart))
             :deploy (phase-fn
                       (install-cinderella)
